@@ -69,9 +69,9 @@ export default {
       };
       try {
         const response = await axios({
-          method: "get",
-          url: "https://x-user-api.mindzzle.com/registrations/api/login/",
-          params: {
+          method: "post",
+          url: "http://localhost:8000/registrations/api/login/",
+          data: {
             email: credentials.email,
             password: credentials.password
           },
@@ -79,16 +79,18 @@ export default {
               Accept: "application/json",
               "Content-Type": "application/json;charset=UTF-8",
           }
-        });
-
+        }).then(response => {
           const resp = response.data;
-
-          if (resp.api_status === 200) {
+          console.log(response.data)
+          localStorage.setItem('token',resp.token)
+          localStorage.setItem('email',resp.user.email)
+          if (resp.api_status === 202) {
               this.$router.push('/dashboard')
           }
           else {
 
           }
+          });
 
       } catch (error) {
         console.error("whoops " + error);
