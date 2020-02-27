@@ -4,13 +4,16 @@ import DashboardLayout from '@/layout/DashboardLayout'
 import AuthLayout from '@/layout/AuthLayout'
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   linkExactActiveClass: 'active',
   routes: [
     {
       path: '/',
       redirect: 'dashboard',
       component: DashboardLayout,
+      meta:{
+        requiresAuth:true
+      },
       children: [
         {
           path: '/dashboard',
@@ -66,3 +69,17 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem('token')) {
+      next()
+      return
+    }
+    next('/login') 
+  } else {
+    next() 
+  }
+})
+
+export default router
