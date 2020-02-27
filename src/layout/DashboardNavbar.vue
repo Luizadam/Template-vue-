@@ -45,10 +45,10 @@
                             <span>Support</span>
                         </router-link> -->
                         <div class="dropdown-divider"></div>
-                        <router-link to="/profile" class="dropdown-item">
+                        <div class="dropdown-item" @click="logout">
                             <i class="ni ni-user-run"></i>
                             <span>Logout</span>
-                        </router-link>
+                        </div>
                     </template>
                 </base-dropdown>
             </li>
@@ -56,6 +56,7 @@
     </base-nav>
 </template>
 <script>
+import axios from 'axios'
   export default {
     data() {
       return {
@@ -64,6 +65,7 @@
         searchQuery: ''
       };
     },
+    /* eslint-disable */
     methods: {
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
@@ -73,6 +75,19 @@
       },
       toggleMenu() {
         this.showMenu = !this.showMenu;
+      },
+      logout(){
+        axios({
+          method: "get",
+          url: "http://localhost:8000/registrations/api/login/",
+          headers: {
+              Authorization: localStorage.getItem('token')
+          }
+        }).then(response => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('email')
+        this.$router.push('/login')
+      });
       }
     }
   };
