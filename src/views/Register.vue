@@ -1,95 +1,249 @@
 <template>
-    <div class="row justify-content-center">
-        <div class="col-lg-5 col-md-7">
-            <div class="card bg-secondary shadow border-0" style="margin-top:-5rem">
-                <div class="card-header bg-transparent pb-2">
-                    <div class="text-muted text-center mt-2 mb-3">
-                        <!-- <small>Sign up with</small>
-                    </div>
-                    <div class="btn-wrapper text-center">
-                        <a href="#" class="btn btn-neutral btn-icon">
-                            <span class="btn-inner--icon"><img src="img/icons/common/github.svg"></span>
-                            <span class="btn-inner--text">Github</span>
-                        </a>
-                        <a href="#" class="btn btn-neutral btn-icon">
-                            <span class="btn-inner--icon"><img src="img/icons/common/google.svg"></span>
-                            <span class="btn-inner--text">Google</span>
-                        </a> -->
-                        <img src="../assets/logobaru.png" alt="Logo Mindzzle" style="width:50%">
-                    </div> 
-                    
-                </div>
-                <div class="card-body px-lg-5 py-lg-5">
-                    <!-- <div class="text-center text-muted mb-4">
-                        <small>Or sign up with credentials</small>
-                    </div> -->
-                    <form role="form">
-
-                        <base-input class="input-group-alternative mb-3"
-                                    placeholder="Name"
-                                    addon-left-icon="ni ni-hat-3"
-                                    v-model="model.name">
-                        </base-input>
-
-                        <base-input class="input-group-alternative mb-3"
-                                    placeholder="Email"
-                                    addon-left-icon="ni ni-email-83"
-                                    v-model="model.email">
-                        </base-input>
-
-                        <base-input class="input-group-alternative"
-                                    placeholder="Password"
-                                    type="password"
-                                    addon-left-icon="ni ni-lock-circle-open"
-                                    v-model="model.password">
-                        </base-input>
-
-                        <div class="text-muted font-italic">
-                            <small>password strength: <span class="text-success font-weight-700">strong</span></small>
-                        </div>
-
-                        <div class="row my-4">
-                            <div class="col-12">
-                                <base-checkbox class="custom-control-alternative">
-                                    <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
-                                </base-checkbox>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <base-button type="primary" class="my-4">Create account</base-button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-6">
-                    <router-link to="/forgotpass" class="text-light">
-                        <small>Forgot password?</small>
-                        </router-link>
-                    
-                </div>
-                <div class="col-6 text-right">
-                    <router-link to="/login" class="text-light">
-                        <small>Login into your account</small>
-                    </router-link>
-                </div>
-            </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+      <div class="card bg-secondary shadow border-0" style="margin-top:-5rem">
+        <div class="card-header bg-transparent pb-2">
+          <div class="text-muted text-center mt-2 mb-3">
+            <img src="../assets/logobaru.png" alt="Logo Mindzzle" style="width:50%" />
+          </div>
         </div>
+        <div class="card-body px-lg-5 py-lg-5">
+          <form role="form" @submit.prevent="check">
+            <base-input
+              class="input-group-alternative mb-3"
+              placeholder="Nama Lengkap"
+              addon-left-icon="ni ni-hat-3"
+              v-model="name"
+            ></base-input>
+
+            <base-input
+              class="input-group-alternative mb-3"
+              placeholder="Email"
+              addon-left-icon="ni ni-email-83"
+              type="email"
+              v-model="email"
+            ></base-input>
+
+            <base-input
+              class="input-group-alternative"
+              placeholder="Kata Sandi"
+              type="password"
+              addon-left-icon="ni ni-lock-circle-open"
+              v-model="password"
+              @keyup="requirePassword()"
+            ></base-input>
+            <!-- <span class="text-danger">{{errors}}</span> -->
+            <!-- <ul type="none" v-if="!this.password.length < 1">
+              <li type="none" class="text-danger" v-for="error in errors" :key="error.id">{{error}}</li>
+            </ul>-->
+            <div
+              v-if="!this.password.length < 1 && !this.errors.length < 1"
+              class="alert alert-danger"
+            >
+              <div class v-for="error in errors" :key="error.id">
+                {{error}}
+                <br />
+              </div>
+            </div>
+
+            <base-input
+              class="input-group-alternative"
+              placeholder="Konfirmasi Kata Sandi"
+              type="password"
+              addon-left-icon="ni ni-lock-circle-open"
+              v-model="secondPassword"
+              @keyup="checkPassword()"
+            ></base-input>
+            <div v-show="!isCheck" class="alert alert-danger">Password tidak sama</div>
+
+            <!-- <base-input
+              class="input-group-alternative"
+              type="date"
+              addon-left-icon="ni ni-hat-3"
+              v-model="birth"
+              :min="minDate"
+            ></base-input> -->
+            <DatePicker></DatePicker>
+
+            <Multiselect
+              v-model="gender.value"
+              class="shad m-bottom"
+              :options="gender.options"
+              :searchable="false"
+              :close-on-select="true"
+              :show-labels="false"
+              placeholder="Jenis Kelamin"
+            ></Multiselect>
+
+            <Multiselect
+              v-model="country.value"
+              class="shad m-bottom"
+              :options="country.options"
+              :searchable="false"
+              :close-on-select="true"
+              :show-labels="false"
+              placeholder="Negara"
+            ></Multiselect>
+
+            <div class="row my-4">
+              <div class="col-12">
+                <base-checkbox class="custom-control-alternative">
+                  <span class="text-muted">
+                    I agree with the
+                    <a href="#!">Privacy Policy</a>
+                  </span>
+                </base-checkbox>
+              </div>
+            </div>
+            <div class="text-center">
+              <base-button type="primary" nativeType="submit" class="my-4">Create account</base-button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-6">
+          <router-link to="/forgotpass" class="text-light">
+            <small>Forgot password?</small>
+          </router-link>
+        </div>
+        <div class="col-6 text-right">
+          <router-link to="/login" class="text-light">
+            <small>Login into your account</small>
+          </router-link>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 <script>
-  export default {
-    name: 'register',
-    data() {
-      return {
-        model: {
-          name: '',
-          email: '',
-          password: ''
-        }
+import Multiselect from "vue-multiselect";
+import VCalendar from "v-calendar";
+
+/* eslint-disable */
+export default {
+  name: "register",
+  components: {
+    Multiselect,
+    VCalendar
+  },
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+      secondPassword: "",
+      birth: "",
+      minDate: "",
+      gender: {
+        value: "",
+        options: ["Laki-laki", "Perempuan"]
+      },
+      country: {
+        value: "",
+        options: ["Indonesia", "India", "Indonesia", "India"]
+      },
+      isCheck: true,
+      errors: []
+    };
+  },
+  created() {
+    this.checkDate();
+  },
+  methods: {
+    check() {
+      if (typeof this.name == "string") {
+        console.log(this.name.toLowerCase());
       }
+
+      let all =
+        this.name +
+        this.email +
+        this.password +
+        this.secondPassword +
+        this.birth +
+        this.gender.value;
+      let name = this.name;
+      let regex = /^[a-zA-Z ]+$/g;
+      let isValid = regex.test(name);
+      let today = new Date();
+      let date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      let currentYear = today.getFullYear();
+      let cek = today.getFullYear() - 18;
+      console.log("lahir tahun", cek);
+
+      console.log("tanggal hari ini", date);
+      console.log(all);
+
+      if (isValid) {
+        alert("Isi dari nama anda adalah huruf semua");
+      } else {
+        alert("harus huruf");
+      }
+    },
+
+    requirePassword() {
+      let kapital = /^.*(?=.*[A-Z]).*$/;
+      let angka = /^.*(?=.*[0-9]).*$/;
+      this.errors = [];
+
+      if (this.password.length < 6) {
+        this.errors.push("Kata sandi minimal 6 karakter");
+      }
+      if (!kapital.test(this.password)) {
+        this.errors.push("Setidaknya harus ada 1 huruf kapital");
+      }
+      if (!angka.test(this.password)) {
+        this.errors.push(" Setidaknya harus ada 1 angka");
+      }
+    },
+
+    checkPassword() {
+      if (this.password === this.secondPassword) {
+        this.isCheck = true;
+        console.log(this.isCheck);
+      } else {
+        this.isCheck = false;
+        console.log(this.isCheck);
+      }
+    },
+
+    checkDate() {
+      let today = new Date();
+      
+      let cek = today.getFullYear() - 18;
+      // console.log("lahir tahun", cek);
+
+      // let date =
+      //   today.getFullYear() +
+      //   "-" +
+      //   (today.getMonth() + 1) +
+      //   "-" +
+      //   today.getDate();
+
+      // let minDate = this.minDate;
+      let checkYear =
+        cek + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+      // console.log(checkYear)
+      this.minDate = checkYear
+      // console.log(this.minDate)
     }
   }
+};
 </script>
-<style>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
+<style lang="scss" scoped>
+.shad {
+  box-shadow: 0 1px 3px rgba(50, 50, 93, 0.15), 0 1px 0 rgba(0, 0, 0, 0.02);
+}
+.m-bottom {
+  margin-bottom: 1.5rem;
+}
 </style>
