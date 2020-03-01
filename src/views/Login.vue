@@ -3,6 +3,7 @@
     <div class="col-lg-5 col-md-7">
       <div class="card bg-secondary shadow border-0" style="margin-top:-6rem">
         <div class="card-header bg-transparent pb-3">
+          
           <div class="text-muted text-center mt-2 mb-3">
             <small></small>
           </div>
@@ -50,15 +51,18 @@
 </template>
 <script>
 import axios from "axios";
+// import Register from "./Register";
 export default {
   name: "login",
   data() {
     return {
       model: {
         email: "",
-        password: ""
-      }
+        password: "",
+        
+      },
     };
+    
   },
 /*eslint-disable*/
   methods: {
@@ -81,10 +85,11 @@ export default {
           }
         }).then(response => {
           const resp = response.data;
-          console.log(response.data)
+          // console.log(response.data)
           localStorage.setItem('token',resp.token)
           localStorage.setItem('email',resp.user.email)
-          if (resp.api_status === 202) {
+          localStorage.setItem('id_user',resp.user.id_user)
+          if (resp.api_status === 200) {
               this.$router.push('/dashboard')
           }
           else {

@@ -20,13 +20,13 @@
                   <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg">
                 </span>
                         <div class="media-body ml-2 d-none d-lg-block">
-                            <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                            <span class="mb-0 text-sm  font-weight-bold">{{user.full_name }}</span>
                         </div>
                     </div>
 
                     <template>
                         <div class=" dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Welcome!</h6>
+                            <h6 class="text-overflow m-0">Welcome {{user.full_name}}</h6>
                         </div>
                         <router-link to="/profile" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
@@ -62,11 +62,13 @@ import axios from 'axios'
       return {
         activeNotifications: false,
         showMenu: false,
-        searchQuery: ''
+        searchQuery: '',
+        user:[]
       };
     },
     /* eslint-disable */
     methods: {
+      
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
       },
@@ -88,7 +90,21 @@ import axios from 'axios'
           localStorage.removeItem('email')
         this.$router.push('/login')
       });
-      }
+      },
+    
+      
+    
+    
+    },
+    mounted(){
+      axios({
+        method:"get",
+        url:"http://localhost:8000/registrations/api/" + localStorage.getItem('id_user')
+      }).then(response => {
+        this.user = response.data
+        // console.log(this.user)
+      })
+      
     }
   };
 </script>

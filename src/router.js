@@ -25,7 +25,7 @@ const router = new Router({
         },
         {
           path: '/icons',
-          name: 'icons',
+          name: 'icons ',
           component: () => import(/* webpackChunkName: "demo" */ './views/Icons.vue')
         },
         {

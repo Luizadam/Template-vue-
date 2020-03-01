@@ -33,7 +33,7 @@
                         </a>
 
                         <div class=" dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Welcome!</h6>
+                            <h6 class="text-overflow m-0">mantap!</h6>
                         </div>
                         <router-link to="/profile" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
@@ -52,10 +52,10 @@
                             <span>Support</span>
                         </router-link> -->
                         <div class="dropdown-divider"></div>
-                        <a href="#!" class="dropdown-item">
+                        <div class="dropdown-item" @click="logout">
                             <i class="ni ni-user-run"></i>
                             <span>Logout</span>
-                        </a>
+                        </div>
                     </base-dropdown>
                 </ul>
             </slot>
@@ -110,7 +110,8 @@
 </template>
 <script>
   import NavbarToggleButton from '@/components/NavbarToggleButton'
-
+  import Axios from 'axios'
+/* eslint-disable */
   export default {
     name: 'sidebar',
     components: {
@@ -139,7 +140,22 @@
       },
       showSidebar() {
         this.$sidebar.displaySidebar(true)
-      }
+      },
+
+    logout(){
+      Axios({
+        method:"GET",
+        url:"http://localhost:8000/registrations/api/login/",
+        headers:{
+          Authorization:localStorage.getItem('token')
+        }
+      }).then(response=>{
+        localStorage.removeItem('token'),
+        localStorage.removeItem('email'),
+        localStorage.removeItem('id_user')
+        this.$router.push('/login')
+      })
+    }
     },
     beforeDestroy() {
       if (this.$sidebar.showSidebar) {

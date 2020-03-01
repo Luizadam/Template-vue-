@@ -2,13 +2,20 @@
   <div class="row justify-content-center">
     <div class="col-lg-5 col-md-7">
       <div class="card bg-secondary shadow border-0" style="margin-top:-5rem">
+           
         <div class="card-header bg-transparent pb-2">
+          <div v-if="isRegistered" class="alert alert-primary">
+              <p style="margin-bottom: 0;">
+                <strong>Registrasi berhasil</strong> Silakan cek email anda untuk aktivasi
+              </p>
+            </div>
+            
           <div class="text-muted text-center mt-2 mb-3">
             <img src="../assets/logobaru.png" alt="Logo Mindzzle" style="width:50%" />
           </div>
         </div>
         <div class="card-body px-lg-5 py-lg-5">
-          <form role="form" @submit.prevent="check">
+          <form role="form" @submit.prevent="Registrasi">
             <base-input
               class="input-group-alternative mb-3"
               placeholder="Nama Lengkap"
@@ -56,14 +63,14 @@
             ></base-input>
             <div v-show="!isCheck" class="alert alert-danger">Password tidak sama</div>
 
-            <!-- <base-input
+            <base-input
               class="input-group-alternative"
               type="date"
               addon-left-icon="ni ni-hat-3"
               v-model="birth"
               :min="minDate"
-            ></base-input> -->
-            <DatePicker></DatePicker>
+            ></base-input>
+            <!-- <DatePicker></DatePicker> -->
 
             <Multiselect
               v-model="gender.value"
@@ -119,6 +126,7 @@
 <script>
 import Multiselect from "vue-multiselect";
 import VCalendar from "v-calendar";
+import Axios from 'axios';
 
 /* eslint-disable */
 export default {
@@ -141,8 +149,9 @@ export default {
       },
       country: {
         value: "",
-        options: ["Indonesia", "India", "Indonesia", "India"]
+        options: ["Indonesia", "United Kingdom", "Germany", "India","United States of America"]
       },
+      isRegistered : false,
       isCheck: true,
       errors: []
     };
@@ -151,6 +160,60 @@ export default {
     this.checkDate();
   },
   methods: {
+      async regist(name,email,password,secondPassword,birth,minDate,gender,country){
+          const Daftar = {
+              name,
+              email,
+              password,
+              secondPassword,
+              birth,
+              minDate,
+              gender,
+              country,
+
+          };
+          try{
+              const response = await Axios({
+                  method:"POST",
+                  url:"http://localhost:8000/registrations/api/",
+                  data:{
+                        full_name: Daftar.name,
+                        email: Daftar.email,
+                        password: Daftar.password,
+                        salt_password: "",
+                        id_user: 2,
+                        birth_day: Daftar.birth,
+                        primary_phone: 0,
+                        primary_address: "",
+                        id_country: 1,
+                        id_regions: 1,
+                        id_city: 1,
+                        tax_num: 0,
+                        description: "",
+                        id_type: 0,
+                        banned_type: 0,
+                        url_photo: "",
+                        token: "",
+                        ssn_num: 0,
+                        verified: 0,
+                        gender: Daftar.gender
+                  }
+              }).then(response => {
+                  const resp = response.data
+                  this.$router.push('/login')
+                  localStorage.setItem('registered',true)
+                  
+                  
+
+              })
+    } catch (error){
+        console.error("wadaww" + error);
+    }
+      },
+    async Registrasi(){
+        await this.regist(this.name,this.email,this.password,this.birth,this.minDate,this.gender,this.country);
+    },
+
     check() {
       if (typeof this.name == "string") {
         console.log(this.name.toLowerCase());
@@ -233,6 +296,13 @@ export default {
       this.minDate = checkYear
       // console.log(this.minDate)
     }
+
+  },
+  mounted(){
+      if (localStorage.hasOwnProperty("registered")) {
+                localStorage.removeItem("registered");
+                this.isRegistered = true;
+            }
   }
 };
 </script>
