@@ -175,7 +175,7 @@ export default {
           try{
               const response = await Axios({
                   method:"POST",
-                  url:"http://localhost:8000/registrations/api/",
+                  url:"https://x-user-api.mindzzle.com/registrations/api/",
                   data:{
                         full_name: Daftar.name,
                         email: Daftar.email,

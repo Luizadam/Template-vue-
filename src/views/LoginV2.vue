@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-content-center">
     <div class="col-lg-5 col-md-7">
-      <div class="card bg-secondary shadow border-0" style="margin-top:-6rem">
+      <div class="card bg-transparent " style="margin-top:-6rem;border:none">
         <div class="card-header bg-transparent pb-3">
           
           <div class="text-muted text-center mt-2 mb-3">
@@ -11,7 +11,7 @@
             <img src="../assets/logobaru.png" style="width:50%" />
           </div>
         </div>
-        <div class="card-body px-lg-5 py-lg-5">
+        <div class="card-body px-lg-5 py-lg-5 bg-transparent">
           <form role="form" @submit.prevent="validate">
             <base-input
               class="input-group-alternative mb-3"

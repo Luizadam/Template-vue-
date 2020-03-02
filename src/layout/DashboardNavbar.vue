@@ -81,7 +81,7 @@ import axios from 'axios'
       logout(){
         axios({
           method: "get",
-          url: "http://localhost:8000/registrations/api/login/",
+          url: "https://x-user-api.mindzzle.com/registrations/api/login/",
           headers: {
               Authorization: localStorage.getItem('token')
           }
@@ -99,7 +99,7 @@ import axios from 'axios'
     mounted(){
       axios({
         method:"get",
-        url:"http://localhost:8000/registrations/api/" + localStorage.getItem('id_user')
+        url:"https://x-user-api.mindzzle.com/registrations/api/" + localStorage.getItem('id_user')
       }).then(response => {
         this.user = response.data
         // console.log(this.user)
