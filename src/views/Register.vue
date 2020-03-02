@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" style="margin-top:-15rem">
     <div class="col-12 col-md-6 d-none d-md-block logo-section">
       <img src="@/assets/logobaru.png" alt class="img-fluid" />
     </div>
@@ -13,7 +13,7 @@
           <base-button type="secondary" @click="isEmpty = false">Close</base-button>
         </template>
       </modal>
-      <div class="card border-0" style="margin-top: -5rem;">
+      <div class="card border-0" style="margin-top: -5rem;background:transparent">
         <div class="card-header bg-transparent pb-2">
           <div v-if="isRegistered" class="alert alert-primary">
             <p style="margin-bottom: 0;">
@@ -22,10 +22,10 @@
           </div>
 
           <div class="text-muted text-center mt-2 mb-3">
-            <h1 class="d-none d-md-block">Register</h1>
+            <!-- <h1 class="d-none d-md-block">Register</h1> -->
           </div>
           <div class="d-block d-md-none text-muted text-center mt-2 mb-3">
-            <img src="../assets/logobaru.png" alt="Logo Mindzzle" style="width:50%" />
+            <img src="../assets/logobaru.png" alt="Logo Mindzzle" style="width:100%" />
           </div>
         </div>
         <div class="card-body px-lg-5 py-lg-5">
@@ -245,6 +245,7 @@ export default {
       password,
       secondPassword,
       birth,
+      minDate,
       gender,
       country
     ) {
@@ -254,6 +255,7 @@ export default {
         password,
         secondPassword,
         birth,
+        minDate,
         gender,
         country
       };
@@ -263,7 +265,7 @@ export default {
           url: "https://x-user-api.mindzzle.com/registrations/api/",
           data: {
             full_name: Daftar.name,
-            email: Daftar.email.toLowerCase(),
+            email: Daftar.email,
             password: Daftar.password,
             salt_password: "",
             id_user: 2,
@@ -287,7 +289,6 @@ export default {
           const resp = response.data;
           this.$router.push("/login");
           localStorage.setItem("registered", true);
-          console.log(resp);
         });
       } catch (error) {
         console.error("wadaww" + error);
@@ -429,4 +430,5 @@ export default {
 .font-color {
   color: #8898aa;
 }
+
 </style>

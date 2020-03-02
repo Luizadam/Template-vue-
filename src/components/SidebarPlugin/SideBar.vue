@@ -145,7 +145,7 @@
     logout(){
       Axios({
         method:"GET",
-        url:"http://localhost:8000/registrations/api/login/",
+        url:"https://x-user-api.mindzzle.com/registrations/api/login/",
         headers:{
           Authorization:localStorage.getItem('token')
         }

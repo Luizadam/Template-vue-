@@ -3,7 +3,7 @@
     <div class="col-lg-5 col-md-7">
       <div class="card bg-secondary shadow border-0" style="margin-top:-6rem">
         <div class="card-header bg-transparent pb-3">
-          
+
           <div class="text-muted text-center mt-2 mb-3">
             <small></small>
           </div>
@@ -59,10 +59,10 @@ export default {
       model: {
         email: "",
         password: "",
-        
+
       },
     };
-    
+
   },
 /*eslint-disable*/
   methods: {
@@ -74,7 +74,7 @@ export default {
       try {
         const response = await axios({
           method: "post",
-          url: "http://localhost:8000/registrations/api/login/",
+          url: "https://x-user-api.mindzzle.com/registrations/api/login/",
           data: {
             email: credentials.email,
             password: credentials.password
