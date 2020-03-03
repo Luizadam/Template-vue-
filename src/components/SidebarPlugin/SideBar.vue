@@ -8,13 +8,15 @@
       <navbar-toggle-button @click.native="showSidebar">
         <span class="navbar-toggler-icon"></span>
       </navbar-toggle-button>
-      <router-link class="navbar-brand" to="/">
-        <img :src="logo" class="navbar-brand-img" alt="..." />
+      <!-- <center> -->
+      <router-link class="row justify-content-center" to="/">
+        <img :src="logo" class="navbar-brand-img img-fluid" alt="..." />
       </router-link>
+      <!-- </center> -->
 
       <slot name="mobile-right">
         <ul class="nav align-items-center d-md-none">
-          <base-dropdown class="nav-item" position="right">
+          <!-- <base-dropdown class="nav-item" position="right">
             <a
               slot="title"
               class="nav-link nav-link-icon"
@@ -25,24 +27,24 @@
               aria-expanded="false"
             >
               <i class="ni ni-bell-55"></i>
-            </a>
+          </a>-->
 
-            <a class="dropdown-item" href="#">Action</a>
+          <!-- <a class="dropdown-item" href="#">Action</a>
             <a class="dropdown-item" href="#">Another action</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </base-dropdown>
+          <a class="dropdown-item" href="#">Something else here</a>-->
+          <!-- </base-dropdown> -->
           <base-dropdown class="nav-item" position="right">
             <a slot="title" class="nav-link" href="#" role="button">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="img/theme/team-1-800x800.jpg" />
+                  <img alt="Image placeholder" :src="user.url_photo" />
                 </span>
               </div>
             </a>
 
             <div class="dropdown-header noti-title">
-              <h6 class="text-overflow m-0">mantap!</h6>
+              <h6 class="text-overflow m-0">Welcome {{user.full_name}}</h6>
             </div>
             <router-link to="/profile" class="dropdown-item">
               <i class="ni ni-single-02"></i>
@@ -91,36 +93,6 @@
           <slot name="links"></slot>
         </ul>
         <!--Divider-->
-        <hr class="my-3" />
-        <!--Heading-->
-        <h6 class="navbar-heading text-muted">Documentation</h6>
-        <!--Navigation-->
-        <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="https://demos.creative-tim.com/vue-argon-dashboard/documentation"
-            >
-              <i class="ni ni-spaceship"></i> Getting started
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="https://demos.creative-tim.com/vue-argon-dashboard/documentation/foundation/colors.html"
-            >
-              <i class="ni ni-palette"></i> Foundation
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="https://demos.creative-tim.com/vue-argon-dashboard/documentation/components/alerts.html"
-            >
-              <i class="ni ni-ui-04"></i> Components
-            </a>
-          </li>
-        </ul>
       </div>
     </div>
   </nav>
@@ -131,13 +103,18 @@ import Axios from "axios";
 /* eslint-disable */
 export default {
   name: "sidebar",
+  data() {
+    return {
+      user: []
+    };
+  },
   components: {
     NavbarToggleButton
   },
   props: {
     logo: {
       type: String,
-      default: "img/brand/green.png",
+      default: "img/brand/logo-orange.png",
       description: "Sidebar app logo"
     },
     autoClose: {
@@ -159,7 +136,6 @@ export default {
     showSidebar() {
       this.$sidebar.displaySidebar(true);
     },
-
     logout() {
       Axios({
         method: "GET",
@@ -168,10 +144,10 @@ export default {
           Authorization: localStorage.getItem("token")
         }
       }).then(response => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("id_user");
-        this.$router.push("/register");
+        localStorage.removeItem("token"),
+          localStorage.removeItem("email"),
+          localStorage.removeItem("id_user");
+        this.$router.push("/login");
       });
     }
   },
@@ -179,6 +155,17 @@ export default {
     if (this.$sidebar.showSidebar) {
       this.$sidebar.showSidebar = false;
     }
+  },
+  mounted() {
+    Axios({
+      method: "get",
+      url:
+        "https://x-user-api.mindzzle.com/registrations/api/" +
+        localStorage.getItem("id_user")
+    }).then(response => {
+      this.user = response.data;
+      // console.log(this.user)
+    });
   }
 };
 </script>
