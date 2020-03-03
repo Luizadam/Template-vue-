@@ -6,7 +6,7 @@ Vue.use(Router);
 
 const router = new Router({
   linkExactActiveClass: "active",
-  mode: 'history',
+  mode: "history",
   routes: [
     {
       path: "/",
@@ -61,12 +61,6 @@ const router = new Router({
           name: "login",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Login.vue")
-        },
-        {
-          path: "/register",
-          name: "register",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Register.vue")
         },
         {
           path: "/forgotpass",

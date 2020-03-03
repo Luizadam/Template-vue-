@@ -13,12 +13,12 @@
                                 <span class="btn-inner--icon"><img src="img/icons/common/google.svg"></span>
                                 <span class="btn-inner--text">Google</span>
                             </a> -->
-                            <img src="../assets/logobaru.png" style="width:50%">
+                            <img src="img/brand/logo-default.png" style="width:50%">
                         </div>
-                        
+
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        
+
                         <form role="form">
                             <base-input class="input-group-alternative mb-3"
                                         placeholder="Email"
@@ -33,7 +33,7 @@
                                         v-model="model.password">
                             </base-input> -->
 
-                            
+
                             <div class="text-center">
                                 <base-button type="primary" class="my-4">Forgot Password</base-button>
                             </div>
@@ -48,9 +48,9 @@
                 </div>
                 <div class="col-6 text-right" >
                     <router-link to="/register" class="text-light"><small>Create new account</small></router-link>
-                    
+
                 </div>
-                
+
             </div>
             </div>
         </div>

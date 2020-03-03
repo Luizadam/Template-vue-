@@ -4,6 +4,7 @@ import BaseButton from "../components/BaseButton";
 import BaseCheckbox from "../components/BaseCheckbox";
 import BaseInput from "../components/BaseInput";
 import BaseDropdown from "../components/BaseDropdown";
+import BaseFooter from "../components/BaseFooter";
 import BaseNav from "../components/BaseNav";
 import BasePagination from "../components/BasePagination";
 import BaseProgress from "../components/BaseProgress";
@@ -26,6 +27,7 @@ export default {
     Vue.component(BaseInput.name, BaseInput);
     Vue.component(BaseNav.name, BaseNav);
     Vue.component(BaseDropdown.name, BaseDropdown);
+    Vue.component(BaseFooter.name, BaseFooter);
     Vue.component(BaseCheckbox.name, BaseCheckbox);
     Vue.component(BasePagination.name, BasePagination);
     Vue.component(BaseProgress.name, BaseProgress);
