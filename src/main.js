@@ -21,9 +21,13 @@ import router from './router'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
 
-// Third-Party
-import CKEditor from '@ckeditor/ckeditor5-vue';
+// Third-Party libraries
+
+import CKEditor from '@ckeditor/ckeditor5-vue'
 Vue.use(CKEditor)
+
+import VuePaginate from 'vue-paginate'
+Vue.use(VuePaginate)
 
 Vue.config.productionTip = false
 Vue.use(ArgonDashboard)

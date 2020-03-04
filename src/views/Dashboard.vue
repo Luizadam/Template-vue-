@@ -135,14 +135,9 @@
               <div class="row">
                 <div class="col">
                   <form method="post" @submit.prevent="postFeed">
-                    <ckeditor :editor="editor" v-model="feeds.content" :config="editorConfig"></ckeditor>
+                    <ckeditor :editor="editor.type" :config="editor.config" v-model="feeds.content"></ckeditor>
                     <div class="text-right">
-                      <base-button
-                        type="primary"
-                        nativeType="submit"
-                        @click.prevent="check"
-                        class="my-4"
-                      >Kirim</base-button>
+                      <base-button type="primary" nativeType="submit" class="my-4">Kirim</base-button>
                     </div>
                   </form>
                 </div>
@@ -152,13 +147,23 @@
           <!-- End Comment Form -->
           <!-- Feeds -->
           <div class="mt-5">
-            <div class="card shadow text-left mb-4" v-for="feed in feeds.data" :key="feed.id">
-              <div class="card-body">
-                <h4 class="card-title">{{ feed.user_name }}</h4>
-                <p class="card-text" v-html="feed.content"></p>
-                <small>{{ feed.created_at }}</small>
+            <paginate name="feeds" :list="feeds.data" :per="5">
+              <div
+                class="card shadow text-left mb-4"
+                v-for="feed in paginated('feeds')"
+                :key="feed.id"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">{{ feed.user_name }}</h4>
+                  <p class="card-text" v-html="feed.content"></p>
+                  <small>{{ timeDelta(feed.created_at) }}</small>
+                </div>
               </div>
-            </div>
+            </paginate>
+          </div>
+          <div class="row">
+            <paginate-links for="feeds" :show-step-links="true"></paginate-links>
+            <base-pagination :page-count="10" align="center"></base-pagination>
           </div>
           <!-- End Feeds -->
         </div>
@@ -168,7 +173,8 @@
 </template>
 <script>
 /* eslint-disable */
-import axios from "axios";
+import axios from "@/services/api";
+import moment from "moment";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export default {
@@ -180,23 +186,29 @@ export default {
         content: "",
         data: null
       },
-      editor: ClassicEditor
+      paginate: ["feeds"],
+      editor: {
+        type: ClassicEditor,
+        config: {}
+      }
     };
   },
-  mounted() {
+  created() {
     this.fetchUser();
     this.fetchFeeds();
+    this._sortFeeds();
   },
   methods: {
+    /**
+     * Fetches current user for user profile card
+     */
     async fetchUser() {
       try {
         const response = await axios({
           method: "GET",
-          url:
-            "https://x-user-api.mindzzle.com/registrations/api/" +
-            localStorage.getItem("id_user"),
+          url: "/registrations/api/" + localStorage.getItem("id_user"),
           headers: {
-            Authorization: localStorage.getItem("token"),
+            // Authorization: localStorage.getItem("token"),
             Accept: "application/json",
             "Content-Type": "application/json;charset=UTF-8"
           }
@@ -207,13 +219,16 @@ export default {
         console.log("whoops", error);
       }
     },
+    /**
+     * Fetches all the feeds
+     */
     async fetchFeeds() {
       try {
         const response = await axios({
           method: "GET",
-          url: "https://x-user-api.mindzzle.com/feeds/api/",
+          url: "/feeds/api/",
           headers: {
-            Authorization: localStorage.getItem("token"),
+            // Authorization: localStorage.getItem("token"),
             Accept: "application/json",
             "Content-Type": "application/json;charset=UTF-8"
           }
@@ -224,18 +239,21 @@ export default {
         console.log("whoops", error);
       }
     },
+    /**
+     * Post a new feed
+     */
     async postFeed() {
       try {
         const response = await axios({
           method: "POST",
-          url: "https://x-user-api.mindzzle.com/feeds/api/",
+          url: "/feeds/api/",
           data: {
             content: this.feeds.content,
             user_id: localStorage.getItem("id_user"),
-            user_name: localStorage.getItem("name")
+            user_name: this.user.full_name
           },
           headers: {
-            Authorization: localStorage.getItem("token"),
+            // Authorization: localStorage.getItem("token"),
             Accept: "application/json",
             "Content-Type": "application/json;charset=UTF-8"
           }
@@ -246,16 +264,45 @@ export default {
       } catch (error) {
         console.log("whoops", error);
       }
+    },
+    /**
+     * Gets the delta time from a feed
+     */
+    timeDelta(date) {
+      return moment(date).fromNow();
+    },
+    /**
+     * Sort feeds by feed upload date
+     */
+    _sortFeeds() {
+      this.feeds = this.feeds.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      console.log(this.feeds);
     }
   },
   computed: {
-    userAge() {
+    /**
+     * Gets the user's age
+     */
+    userAge: function() {
       return Math.floor(
         (new Date() - new Date(this.user.birth_day).getTime()) / 3.15576e10
       );
     },
-    userFirstName() {
+    /**
+     * Gets the user's first name
+     */
+    userFirstName: function() {
       return this.user.full_name.split(" ")[0];
+    },
+    /**
+     * Sort feeds by feed upload date
+     */
+    sortFeeds: function() {
+      return (this.feeds = this.feeds.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      ));
     }
   }
 };

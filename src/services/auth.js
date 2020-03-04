@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./api";
 
 /*eslint-disable*/
 export default {
@@ -11,7 +11,7 @@ export default {
     try {
       let response = await axios({
         method: "POST",
-        url: "https://x-user-api.mindzzle.com/registrations/api/login/",
+        url: "/registrations/api/login/",
         data: {
           email: credentials.email,
           password: credentials.password
@@ -23,7 +23,6 @@ export default {
       });
 
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("name", response.data.user.full_name);
       localStorage.setItem("email", response.data.user.email);
       localStorage.setItem("id_user", response.data.user.id_user);
 

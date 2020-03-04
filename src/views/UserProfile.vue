@@ -30,12 +30,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-              <div class="d-flex justify-content-between">
-                <base-button size="sm" type="info" class="mr-4">Connect</base-button>
-                <base-button size="sm" type="default" class="float-right">Message</base-button>
-              </div>
-            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
             <div class="card-body pt-0 pt-md-4">
               <div class="row">
                 <div class="col">
@@ -180,7 +175,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "@/services/api";
 
 export default {
   name: "user-profile",
@@ -197,9 +192,7 @@ export default {
     async fetchUser() {
       const response = await axios({
         method: "GET",
-        url:
-          "https://x-user-api.mindzzle.com/registrations/api/" +
-          localStorage.getItem("id_user")
+        url: "/registrations/api/" + localStorage.getItem("id_user")
       });
       this.user = response.data;
       this.model = response.data;

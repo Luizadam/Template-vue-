@@ -14,8 +14,8 @@
           }"
         />
 
-        <sidebar-item :link="{name: 'Friends', icon: 'ni ni-planet text-blue', path: '/icons'}"/>
-        <sidebar-item :link="{name: 'Experience', icon: 'ni ni-pin-3 text-orange', path: '/maps'}"/>
+        <sidebar-item :link="{name: 'Friends', icon: 'fas fa-users text-blue', path: '/icons'}"/>
+        <sidebar-item :link="{name: 'Experience', icon: 'fas fa-star text-orange', path: '/maps'}"/>
         <sidebar-item :link="{name: 'Manajemen', icon: 'ni ni-bullet-list-67 text-red', path: '/tables'}"/>
 
       </template>
